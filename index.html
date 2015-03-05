@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<!-- Didesweb -->  
+<!-- Diseño y desarrollo web -->  
+<!-- http://didesweb.com/-->  
+<!-- Este obra está bajo licencia Creative Commons Attribution --> 
+<html lang="es">
+<head>
+	<meta charset="UTF-8">	
+	<title>Didesweb, API Geolocalización</title>
+	<style type="text/css">body{text-align:center;margin:0 auto;}#mapholder{margin:0 auto;}</style>
+</head>
+<body>
+	<h1>&copy; Didesweb, API Geolocalización y Google Maps</h1>
+	<p>Acepta la solicitud para ver tu ubicación</p>
+	<cite>Los datos no serán guardados para recopilar ninguna información</cite>
+	<div>
+		<p>
+			<button onclick="obtenerLocalizacion()">Obtener coordenadas</button>
+			<p id="coordenadas_usuario"></p>
+			<script>
+				var mostrar_coordenadas = document.getElementById("coordenadas_usuario");
+
+				function obtenerLocalizacion() {
+					if (navigator.geolocation) {
+						navigator.geolocation.getCurrentPosition(mostrarPosicion);
+					} else { 
+						mostrar_coordenadas.innerHTML = "Tu navegador no soporta esta tecnologia";
+					}
+				}
+				function mostrarPosicion(posicion_usuario) {
+					mostrar_coordenadas.innerHTML = "Latitud: " + posicion_usuario.coords.latitude + 
+					"<br>Longitud: " + posicion_usuario.coords.longitude;	
+				}
+			</script>
+		</p>		
+	</div>
+	<div>	
+		<p>
+			<p>Pulsa el botón para obtener tus coordenadas y el mapa</p>
+			<button onclick="obtenerLocalizacion2()">Ver mapa y coordenadas</button>
+			<p id="coordenadas_usuario2"></p>
+			<p><img id="mapa2" src=""></p>
+			<script>
+				var mostrar_coordenadas2 = document.getElementById("coordenadas_usuario2");
+
+				function obtenerLocalizacion2() {
+					if (navigator.geolocation) {
+						navigator.geolocation.getCurrentPosition(mostrarPosicion2,mostrarError2);
+					} else { 
+						mostrar_coordenadas2.innerHTML = "Tu navegador no soporta esta tecnologia";
+					}
+				}
+				function mostrarPosicion2(posicion_usuario2) {
+					mostrar_coordenadas2.innerHTML = "Latitud: " + posicion_usuario2.coords.latitude + 
+					"<br>Longitud: " + posicion_usuario2.coords.longitude;
+					var lat = posicion_usuario2.coords.latitude;
+					var lon = posicion_usuario2.coords.longitude;
+					var map = document.getElementById("mapa2");
+					map.src = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lon + "&zoom=15&size=400x400&markers=color:green|label:A|" + lat + "," + lon + "&sensor=false";
+				}
+				function mostrarError2(error) {
+					switch(error.code) {
+						case error.PERMISSION_DENIED:
+							mostrar_coordenadas2.innerHTML = "User denied the request for Geolocation."
+							break;
+						case error.POSITION_UNAVAILABLE:
+							mostrar_coordenadas2.innerHTML = "Location information is unavailable."
+							break;
+						case error.TIMEOUT:
+							mostrar_coordenadas2.innerHTML = "The request to get user location timed out."
+							break;
+						case error.UNKNOWN_ERROR:
+							mostrar_coordenadas2.innerHTML = "An unknown error occurred."
+							break;
+					}
+				}
+			</script>
+		</p>		
+	</div>
+	<div>	
+		<p>
+			<p>Pulsa el botón para ver el mapa</p>
+			<button onclick="obtenerLocalizacion3()">Ver mapa con funciones</button>
+			<p id="coordenadas_usuario3"></p>
+			<div id="mapholder"></div>
+			<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+			<script>
+				var mostrar_coordenadas3 = document.getElementById("coordenadas_usuario3");
+
+				function obtenerLocalizacion3() {
+					if (navigator.geolocation) {
+						navigator.geolocation.getCurrentPosition(mostrarPosicion3,mostrarError3);
+					} else { 
+						mostrar_coordenadas3.innerHTML = "Tu navegador no soporta esta tecnologia";
+					}
+				}
+				function mostrarPosicion3(posicion_usuario3) {
+					lat = posicion_usuario3.coords.latitude;
+					lon = posicion_usuario3.coords.longitude;
+					latlon = new google.maps.LatLng(lat, lon)
+					mapholder = document.getElementById('mapholder')
+					mapholder.style.height = '250px';
+					mapholder.style.width = '500px';
+					var myOptions = {
+						center:latlon,zoom:14,
+						mapTypeId:google.maps.MapTypeId.ROADMAP,
+						mapTypeControl:false,
+						navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+					}		
+					var map = new google.maps.Map(document.getElementById("mapholder"), myOptions);
+					var marker = new google.maps.Marker({posicion_usuario3:latlon,map:map,title:"You are here!"});
+				}
+				function mostrarError3(error) {
+					switch(error.code) {
+						case error.PERMISSION_DENIED:
+							mostrar_coordenadas3.innerHTML = "User denied the request for Geolocation."
+							break;
+						case error.POSITION_UNAVAILABLE:
+							mostrar_coordenadas3.innerHTML = "Location information is unavailable."
+							break;
+						case error.TIMEOUT:
+							mostrar_coordenadas3.innerHTML = "The request to get user location timed out."
+							break;
+						case error.UNKNOWN_ERROR:
+							mostrar_coordenadas3.innerHTML = "An unknown error occurred."
+							break;
+					}
+				}
+			</script>
+		</p>
+	</div>		
+</body>
+</html>
